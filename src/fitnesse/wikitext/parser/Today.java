@@ -24,7 +24,7 @@ public class Today extends SymbolType implements Rule, Translation {
         if (lookAhead.size() != 0 ) {
             String option = lookAhead.get(1).getContent();
             if (isDateFormatOption(option)) {
-                current.putProperty(Today.Format, option);
+                current.putProperty(Format, option);
                 parser.moveNext(2);
             }
         }
@@ -40,15 +40,17 @@ public class Today extends SymbolType implements Rule, Translation {
         lookAhead = parser.peek(new SymbolType[] {SymbolType.Whitespace, SymbolType.Delta});
         if (lookAhead.size() != 0) {
             String increment = lookAhead.get(1).getContent();
-            current.putProperty(Increment, increment);
-            parser.moveNext(2);
+            if ((increment.startsWith("+") || increment.startsWith("-"))
+                    && ScanString.isDigits(increment.substring(1))) {
+                current.putProperty(Increment, increment);
+                parser.moveNext(2);
+            }
         }
         return new Maybe<Symbol>(current);
     }
 
     private boolean isDateFormatOption(String option) {
-        return option.equals("-t")
-                || option.equals("-xml");
+        return option.equals("-t") || option.equals("-xml");
     }
     public String toTarget(Translator translator, Symbol symbol) {
         String increment = symbol.getProperty(Today.Increment);
