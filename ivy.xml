@@ -33,5 +33,6 @@
 		<dependency org="org.mockito" name="mockito-all" rev="1.7" conf="test->default" />
 		<dependency org="junit" name="junit" rev="4.10" conf="test->default" />
 		<dependency org="org.mozilla" name="rhino" rev="1.7R4" conf="lesscss->default" />
+                <dependency org="net.sourceforge.jexcelapi" name="jxl" rev="2.6.3"/>
 	</dependencies>
 </ivy-module>
