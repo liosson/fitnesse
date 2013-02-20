@@ -28,7 +28,7 @@ public abstract class Binding {
       binding = new SaveBinding();
     else if (name.endsWith("="))
       binding = new RecallBinding();
-    else if (regexMethodPattern.matcher(name).matches())
+    else if (name.startsWith("/") && name.endsWith("/"))
       binding = new RegexQueryBinding();
     else if (methodPattern.matcher(name).matches())
       binding = new QueryBinding();
@@ -218,7 +218,23 @@ public abstract class Binding {
 
   public static class RegexQueryBinding extends Binding {
     public void doCell(Fixture fixture, Parse cell) {
-      fixture.check(cell, adapter);
+      try {
+        if (fixture instanceof ColumnFixture)
+          ((ColumnFixture) fixture).executeIfNeeded();
+
+        Object valueObj = adapter.get(); //...might be validly null
+        String actual = valueObj == null ? "null" : valueObj.toString();
+
+        Pattern regexPattern = Pattern.compile(cell.text());
+        if (regexPattern.matcher(actual).matches()) {
+          fixture.right(cell);
+        } else {
+          fixture.wrong(cell, actual);
+        }
+      }
+      catch (Exception e) {
+        fixture.exception(cell, e);
+      }
     }
   }
 

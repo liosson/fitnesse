@@ -34,6 +34,7 @@ public class BindingTest extends RegexTestCase {
     assertEquals(Binding.SetBinding.class, Binding.create(fixture, "privateIntField").getClass());
     assertEquals(Binding.RecallBinding.class, Binding.create(fixture, "privateIntField=").getClass());
     assertEquals(Binding.SaveBinding.class, Binding.create(fixture, "=privateIntField").getClass());
+    assertEquals(Binding.RegexQueryBinding.class, Binding.create(fixture, "/intField/").getClass());
   }
 
   public static class TestFixture extends ParentTestFixture { }
