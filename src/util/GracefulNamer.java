@@ -87,6 +87,9 @@ public class GracefulNamer {
     }
 
     public void other(char c) {
+      if (c == '_') {
+        finalName.append(c);
+      }
       currentState = new OutOfWordState();
     }
   }
